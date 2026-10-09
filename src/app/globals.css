@@ -3,6 +3,10 @@
 :root {
   --background: #f8faff;
   --foreground: #0f172a;
+  /* O MINDORA ainda não tem um tema escuro: avisa o navegador para não
+     tentar "escurecer" a página sozinho (o que inverte cores de forma
+     incorreta em alguns navegadores/SOs com modo escuro ativado). */
+  color-scheme: light;
 }
 
 @theme inline {
