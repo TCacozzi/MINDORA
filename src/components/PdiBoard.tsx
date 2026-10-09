@@ -1,3 +1,4 @@
+import { FlagIcon } from "@heroicons/react/24/outline";
 import { prisma } from "@/lib/prisma";
 import { createPdi, addObjective, addAction, toggleActionStatus } from "@/lib/pdi-actions";
 
@@ -26,7 +27,12 @@ export async function PdiBoard({ userId }: { userId: string }) {
   if (!pdi) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <p className="text-sm text-slate-600">Nenhum PDI ativo para {user.name}.</p>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-mindora-lilac-light">
+            <FlagIcon className="h-5 w-5 text-mindora-secondary" />
+          </span>
+          <p className="text-sm text-slate-600">Nenhum PDI ativo para {user.name}.</p>
+        </div>
         <form action={createPdi} className="mt-4 flex gap-2">
           <input type="hidden" name="userId" value={userId} />
           <input
@@ -140,7 +146,7 @@ export async function PdiBoard({ userId }: { userId: string }) {
             </div>
             <button
               type="submit"
-              className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:border-slate-400"
+              className="rounded-lg mindora-btn-outline px-3 py-1.5 text-sm font-medium"
             >
               Adicionar
             </button>

@@ -96,7 +96,7 @@ export default async function RelatorioPage() {
         </p>
         <Link
           href="/eu/pdi"
-          className="mt-3 inline-block rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:border-slate-400"
+          className="mt-3 inline-block rounded-lg mindora-btn-outline px-3 py-1.5 text-sm font-medium"
         >
           Ir para meu PDI
         </Link>

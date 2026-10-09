@@ -1,6 +1,14 @@
 import Link from "next/link";
+import {
+  ClipboardDocumentCheckIcon,
+  ChatBubbleLeftRightIcon,
+  FlagIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
+import { Badge } from "@/components/Badge";
+import { EmptyState } from "@/components/EmptyState";
 
 export default async function GestorPage() {
   const manager = await requireUser();
@@ -32,7 +40,11 @@ export default async function GestorPage() {
       </div>
 
       {reports.length === 0 && (
-        <p className="text-sm text-slate-600">Você ainda não tem liderados diretos cadastrados.</p>
+        <EmptyState
+          icon={UserGroupIcon}
+          title="Nenhum liderado direto"
+          description="Quando o administrador cadastrar pessoas com você como gestor, elas aparecem aqui."
+        />
       )}
 
       <div className="space-y-4">
@@ -51,32 +63,35 @@ export default async function GestorPage() {
                 </div>
                 <Link
                   href={`/gestor/${r.id}`}
-                  className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:border-slate-400"
+                  className="rounded-lg mindora-btn-outline px-3 py-1.5 text-sm font-medium"
                 >
                   Ver detalhes
                 </Link>
               </div>
 
               <div className="mt-4 grid grid-cols-1 gap-3 text-sm text-slate-600 sm:grid-cols-3">
-                <p>
+                <p className="flex items-center gap-1.5">
+                  <ClipboardDocumentCheckIcon className="h-4 w-4 text-slate-400" />
                   Big Five:{" "}
-                  <span className="font-medium text-slate-900">
+                  <Badge variant={r.responseSessions.length > 0 ? "success" : "neutral"}>
                     {r.responseSessions.length > 0 ? "Concluído" : "Pendente"}
-                  </span>
+                  </Badge>
                 </p>
-                <p>
+                <p className="flex items-center gap-1.5">
+                  <ChatBubbleLeftRightIcon className="h-4 w-4 text-slate-400" />
                   Ciclo 360°:{" "}
-                  <span className="font-medium text-slate-900">
+                  <Badge variant={cycle ? (cycle.status === "OPEN" ? "info" : "success") : "neutral"}>
                     {cycle
                       ? `${cycle.status === "OPEN" ? "Aberto" : "Encerrado"} (${completedEvaluators}/${cycle.minEvaluators})`
                       : "Nenhum"}
-                  </span>
+                  </Badge>
                 </p>
-                <p>
+                <p className="flex items-center gap-1.5">
+                  <FlagIcon className="h-4 w-4 text-slate-400" />
                   PDI ativo:{" "}
-                  <span className="font-medium text-slate-900">
+                  <Badge variant={r.pdis[0] ? "info" : "neutral"}>
                     {r.pdis[0] ? `${r.pdis[0].objectives.length} objetivo(s)` : "Nenhum"}
-                  </span>
+                  </Badge>
                 </p>
               </div>
             </div>

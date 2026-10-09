@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
+import { Badge } from "@/components/Badge";
+import { EmptyState } from "@/components/EmptyState";
 
 const RELATIONSHIP_LABEL: Record<string, string> = {
   SELF: "Autoavaliação",
@@ -40,7 +43,7 @@ export default async function Feedback360Page() {
           <p className="mt-1 text-sm text-slate-700">{myCycle.title}</p>
           <Link
             href="/eu/360/resultado"
-            className="mt-3 inline-block rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:border-slate-400"
+            className="mt-3 inline-block rounded-lg mindora-btn-outline px-3 py-1.5 text-sm font-medium"
           >
             Ver meu resultado
           </Link>
@@ -50,7 +53,11 @@ export default async function Feedback360Page() {
       <div className="space-y-3">
         <h2 className="text-lg font-semibold text-slate-900">Avaliações para responder</h2>
         {invitations.length === 0 && (
-          <p className="text-sm text-slate-600">Nenhum convite de avaliação no momento.</p>
+          <EmptyState
+            icon={ChatBubbleLeftRightIcon}
+            title="Nenhum convite no momento"
+            description="Quando alguém pedir sua avaliação em um ciclo de 360°, os convites aparecem aqui."
+          />
         )}
         {invitations.map((inv) => (
           <div
@@ -61,20 +68,20 @@ export default async function Feedback360Page() {
               <p className="text-sm font-medium text-slate-900">
                 {inv.cycle.subjectUserId === user.id ? "Você mesmo(a)" : inv.cycle.subject.name}
               </p>
-              <p className="text-xs text-slate-500">
-                {inv.cycle.title} · {RELATIONSHIP_LABEL[inv.relationship]} ·{" "}
-                {inv.status === "COMPLETED" ? "Concluída" : "Pendente"}
+              <p className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
+                {inv.cycle.title} · {RELATIONSHIP_LABEL[inv.relationship]}
+                <Badge variant={inv.status === "COMPLETED" ? "success" : "neutral"}>
+                  {inv.status === "COMPLETED" ? "Concluída" : "Pendente"}
+                </Badge>
               </p>
             </div>
-            {inv.status === "PENDING" ? (
+            {inv.status === "PENDING" && (
               <Link
                 href={`/eu/360/${inv.id}`}
                 className="rounded-lg mindora-btn-primary px-3 py-1.5 text-sm font-medium"
               >
                 Responder
               </Link>
-            ) : (
-              <span className="text-xs text-emerald-600">Concluída ✓</span>
             )}
           </div>
         ))}

@@ -1,20 +1,29 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  HomeIcon,
+  ClipboardDocumentCheckIcon,
+  ChartBarIcon,
+  ChatBubbleLeftRightIcon,
+  FlagIcon,
+  UserGroupIcon,
+  BuildingOfficeIcon,
+} from "@heroicons/react/24/outline";
 import { signOut } from "@/auth";
 import type { Role } from "@/generated/prisma";
 
 const SELF_NAV = [
-  { href: "/eu", label: "Minha jornada" },
-  { href: "/eu/questionario", label: "Questionário" },
-  { href: "/eu/relatorio", label: "Meu relatório" },
-  { href: "/eu/360", label: "Feedback 360°" },
-  { href: "/eu/pdi", label: "Meu PDI" },
+  { href: "/eu", label: "Minha jornada", icon: HomeIcon },
+  { href: "/eu/questionario", label: "Questionário", icon: ClipboardDocumentCheckIcon },
+  { href: "/eu/relatorio", label: "Meu relatório", icon: ChartBarIcon },
+  { href: "/eu/360", label: "Feedback 360°", icon: ChatBubbleLeftRightIcon },
+  { href: "/eu/pdi", label: "Meu PDI", icon: FlagIcon },
 ];
 
-const EXTRA_NAV_BY_ROLE: Record<Role, { href: string; label: string }[]> = {
+const EXTRA_NAV_BY_ROLE: Record<Role, { href: string; label: string; icon: typeof HomeIcon }[]> = {
   PROFISSIONAL: [],
-  GESTOR: [{ href: "/gestor", label: "Minha equipe" }],
-  ADMIN: [{ href: "/admin", label: "Organização" }],
+  GESTOR: [{ href: "/gestor", label: "Minha equipe", icon: UserGroupIcon }],
+  ADMIN: [{ href: "/admin", label: "Organização", icon: BuildingOfficeIcon }],
 };
 
 export function AppShell({
@@ -44,8 +53,9 @@ export function AppShell({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-sm text-slate-600 hover:text-mindora-secondary"
+                  className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-mindora-secondary"
                 >
+                  <item.icon className="h-4 w-4" />
                   {item.label}
                 </Link>
               ))}
