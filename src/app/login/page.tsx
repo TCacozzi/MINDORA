@@ -27,8 +27,21 @@ export default async function LoginPage({
   const { error } = await searchParams;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-mindora-lilac-light via-background to-background px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-mindora-lilac-light via-background to-background px-4">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 -left-24 h-80 w-80 rounded-full bg-gradient-to-br from-mindora-secondary to-mindora-violet opacity-20 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-1/3 -right-16 h-64 w-64 rounded-full bg-gradient-to-br from-mindora-violet to-mindora-blue-soft opacity-20 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-32 left-1/4 h-96 w-96 rounded-full bg-gradient-to-br from-mindora-lilac to-mindora-secondary opacity-15 blur-3xl"
+      />
+
+      <div className="relative z-10 w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <Image
           src="/mindora-logo.png"
           alt="MINDORA — People Intelligence & Development"
