@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ClipboardDocumentCheckIcon,
@@ -31,11 +32,20 @@ export default async function GestorPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Minha equipe</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Acompanhamento de desenvolvimento dos seus liderados diretos — MINDORA Leader.
-        </p>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900">Minha equipe</h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Acompanhamento de desenvolvimento dos seus liderados diretos — MINDORA Leader.
+          </p>
+        </div>
+        <Image
+          src="/illustrations/equipes.png"
+          alt=""
+          width={525}
+          height={507}
+          className="hidden h-24 w-auto shrink-0 sm:block"
+        />
       </div>
 
       {reports.length === 0 && (

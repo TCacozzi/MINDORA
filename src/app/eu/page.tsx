@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
@@ -38,11 +39,20 @@ export default async function EuDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Olá, {user.name?.split(" ")[0]}</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Sua jornada de autoconhecimento e desenvolvimento contínuo — MINDORA Self.
-        </p>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900">Olá, {user.name?.split(" ")[0]}</h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Sua jornada de autoconhecimento e desenvolvimento contínuo — MINDORA Self.
+          </p>
+        </div>
+        <Image
+          src="/illustrations/autoconhecimento.png"
+          alt=""
+          width={529}
+          height={507}
+          className="hidden h-24 w-auto shrink-0 sm:block"
+        />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
