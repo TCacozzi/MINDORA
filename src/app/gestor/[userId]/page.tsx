@@ -43,7 +43,7 @@ export default async function LideradoPage({
           <h2 className="text-lg font-semibold text-slate-900">Feedback 360°</h2>
           <Link
             href={`/gestor/360/novo?subjectUserId=${report.id}`}
-            className="rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800"
+            className="rounded-lg mindora-btn-primary px-3 py-1.5 text-sm font-medium"
           >
             Abrir novo ciclo
           </Link>

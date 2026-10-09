@@ -29,7 +29,7 @@ export default async function RelatorioPage() {
         </p>
         <Link
           href="/eu/questionario"
-          className="inline-block rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800"
+          className="inline-block rounded-lg mindora-btn-primary px-3 py-1.5 text-sm font-medium"
         >
           Responder agora
         </Link>
@@ -74,7 +74,7 @@ export default async function RelatorioPage() {
             )}
             <div className="mt-3 h-2.5 w-full rounded-full bg-slate-100">
               <div
-                className="h-2.5 rounded-full bg-slate-900"
+                className="h-2.5 rounded-full bg-gradient-to-r from-mindora-secondary to-mindora-violet"
                 style={{ width: `${((s.rawMean - 1) / 4) * 100}%` }}
               />
             </div>

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8faff;
+  --foreground: #0f172a;
 }
 
 @theme inline {
@@ -10,17 +10,40 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* MINDORA brand palette */
+  --color-mindora-primary: #1a1f4b;
+  --color-mindora-secondary: #7c5cff;
+  --color-mindora-lilac: #c7a8ff;
+  --color-mindora-lilac-light: #e9ddff;
+  --color-mindora-purple-dark: #4b2e83;
+  --color-mindora-violet: #8b6cef;
+  --color-mindora-indigo: #6366f1;
+  --color-mindora-blue-soft: #93b4ff;
+  --color-mindora-success: #10b981;
+  --color-mindora-info: #3b82f6;
+  --color-mindora-warning: #f59e0b;
+  --color-mindora-danger: #ef4444;
+  --color-mindora-highlight: #ec4899;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.mindora-btn-primary {
+  background-image: linear-gradient(to right, var(--color-mindora-secondary), var(--color-mindora-violet));
+  color: #ffffff;
+  transition: opacity 0.15s ease;
+}
+
+.mindora-btn-primary:hover {
+  opacity: 0.9;
+}
+
+.mindora-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "@/auth";
 import type { Role } from "@/generated/prisma";
@@ -28,19 +29,22 @@ export function AppShell({
   const nav = [...SELF_NAV, ...EXTRA_NAV_BY_ROLE[role]];
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-6">
-            <span className="text-sm font-semibold tracking-tight text-slate-900">
-              MINDORA
-            </span>
+            <Link href="/eu" className="flex items-center gap-2">
+              <Image src="/mindora-icon.png" alt="" width={28} height={22} priority />
+              <span className="text-sm font-semibold tracking-tight text-mindora-primary">
+                MINDORA
+              </span>
+            </Link>
             <nav className="flex gap-4">
               {nav.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-sm text-slate-600 hover:text-slate-900"
+                  className="text-sm text-slate-600 hover:text-mindora-secondary"
                 >
                   {item.label}
                 </Link>
@@ -57,7 +61,7 @@ export function AppShell({
             >
               <button
                 type="submit"
-                className="text-sm text-slate-500 hover:text-slate-900"
+                className="text-sm text-slate-500 hover:text-mindora-secondary"
               >
                 Sair
               </button>

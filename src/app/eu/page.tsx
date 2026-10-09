@@ -54,7 +54,7 @@ export default async function EuDashboardPage() {
               </p>
               <Link
                 href="/eu/questionario"
-                className="mt-3 inline-block rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800"
+                className="mt-3 inline-block rounded-lg mindora-btn-primary px-3 py-1.5 text-sm font-medium"
               >
                 Começar
               </Link>
@@ -67,7 +67,7 @@ export default async function EuDashboardPage() {
               </p>
               <Link
                 href="/eu/questionario"
-                className="mt-3 inline-block rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800"
+                className="mt-3 inline-block rounded-lg mindora-btn-primary px-3 py-1.5 text-sm font-medium"
               >
                 Continuar
               </Link>
@@ -78,7 +78,7 @@ export default async function EuDashboardPage() {
               <p className="mt-2 text-sm text-slate-700">Avaliação concluída.</p>
               <Link
                 href="/eu/relatorio"
-                className="mt-3 inline-block rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800"
+                className="mt-3 inline-block rounded-lg mindora-btn-primary px-3 py-1.5 text-sm font-medium"
               >
                 Ver meu relatório
               </Link>

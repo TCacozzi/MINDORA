@@ -54,7 +54,7 @@ function ScoreBar({ label, value }: { label: string; value: number | null }) {
       </div>
       <div className="mt-1 h-2 w-full rounded-full bg-slate-100">
         <div
-          className="h-2 rounded-full bg-slate-900"
+          className="h-2 rounded-full bg-gradient-to-r from-mindora-secondary to-mindora-violet"
           style={{ width: value != null ? `${((value - 1) / 4) * 100}%` : "0%" }}
         />
       </div>

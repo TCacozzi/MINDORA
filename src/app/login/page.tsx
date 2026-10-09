@@ -1,4 +1,5 @@
 import { AuthError } from "next-auth";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
 
@@ -26,12 +27,16 @@ export default async function LoginPage({
   const { error } = await searchParams;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-mindora-lilac-light via-background to-background px-4">
       <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-        <h1 className="text-xl font-semibold text-slate-900">MINDORA</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          People Intelligence &amp; Development
-        </p>
+        <Image
+          src="/mindora-logo.png"
+          alt="MINDORA — People Intelligence & Development"
+          width={1214}
+          height={710}
+          className="mx-auto h-auto w-56"
+          priority
+        />
 
         <form action={authenticate} className="mt-6 space-y-4">
           <div>
@@ -69,7 +74,7 @@ export default async function LoginPage({
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800"
+            className="w-full rounded-lg mindora-btn-primary px-3 py-2 text-sm font-medium"
           >
             Entrar
           </button>

@@ -105,7 +105,7 @@ export function QuestionnaireForm({
         </div>
         <div className="mt-2 h-2 w-full rounded-full bg-slate-100">
           <div
-            className="h-2 rounded-full bg-slate-900 transition-all"
+            className="h-2 rounded-full bg-gradient-to-r from-mindora-secondary to-mindora-violet transition-all"
             style={{ width: `${progressPct}%` }}
           />
         </div>
@@ -148,7 +148,7 @@ export function QuestionnaireForm({
                           onClick={() => handleAnswer(question.id, value, false)}
                           className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                             isSelected
-                              ? "border-slate-900 bg-slate-900 text-white"
+                              ? "border-mindora-secondary bg-mindora-secondary text-white"
                               : "border-slate-300 text-slate-600 hover:border-slate-400"
                           } disabled:cursor-not-allowed disabled:opacity-60`}
                         >
@@ -163,7 +163,7 @@ export function QuestionnaireForm({
                         onClick={() => handleAnswer(question.id, null, true)}
                         className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                           current?.notObserved
-                            ? "border-slate-900 bg-slate-900 text-white"
+                            ? "border-mindora-secondary bg-mindora-secondary text-white"
                             : "border-slate-300 text-slate-600 hover:border-slate-400"
                         } disabled:cursor-not-allowed disabled:opacity-60`}
                       >
@@ -191,7 +191,7 @@ export function QuestionnaireForm({
             type="button"
             disabled={isPending || answeredCount < totalCount}
             onClick={handleComplete}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg mindora-btn-primary px-4 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
           >
             Concluir avaliação
           </button>
