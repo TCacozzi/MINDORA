@@ -1,0 +1,310 @@
+// MINDORA — modelo de dados
+// Plataforma de autoconhecimento e desenvolvimento profissional (Big Five + 360° + PDI)
+// Ver documento de concepção para princípios metodológicos e limitações.
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN // administra a organização (configura questionários, ciclos 360, usuários)
+  GESTOR // acompanha liderados: feedback 360 agregado e PDI autorizado
+  PROFISSIONAL // jornada individual: questionário, relatório próprio e PDI
+}
+
+enum QuestionnaireType {
+  BIG_FIVE
+  FEEDBACK_360
+}
+
+enum ResponseScaleType {
+  AGREEMENT_5 // discordo totalmente .. concordo totalmente
+  FREQUENCY_5 // nunca .. sempre, com opção "não observei"
+}
+
+enum SessionStatus {
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum FeedbackCycleStatus {
+  DRAFT
+  OPEN
+  CLOSED
+}
+
+enum InvitationStatus {
+  PENDING
+  COMPLETED
+  DECLINED
+}
+
+enum EvaluatorRelationship {
+  SELF
+  MANAGER
+  PEER
+  DIRECT_REPORT
+  OTHER
+}
+
+enum PdiStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum ActionStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  users          User[]
+  feedbackCycles FeedbackCycle[]
+
+  @@map("organizations")
+}
+
+model User {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  name         String
+  email        String @unique
+  passwordHash String
+  role         Role   @default(PROFISSIONAL)
+
+  managerId String?
+  manager   User?   @relation("ManagerToReports", fields: [managerId], references: [id], onDelete: SetNull)
+  reports   User[]  @relation("ManagerToReports")
+
+  createdAt DateTime @default(now())
+
+  responseSessions        ResponseSession[]
+  feedbackCyclesAsSubject FeedbackCycle[]      @relation("CycleSubject")
+  feedbackInvitations     FeedbackInvitation[] @relation("InvitationEvaluator")
+  pdis                    PDI[]                @relation("PdiOwner")
+  actionsOwned            Action[]             @relation("ActionOwner")
+
+  @@index([organizationId])
+  @@map("users")
+}
+
+model Questionnaire {
+  id        String            @id @default(cuid())
+  key       String            @unique // ex: "ipip50-bigfive-ptbr-v1"
+  name      String
+  type      QuestionnaireType
+  scaleType ResponseScaleType
+  version   Int               @default(1)
+  locale    String            @default("pt-BR")
+  isActive  Boolean           @default(true)
+  createdAt DateTime          @default(now())
+
+  dimensions Dimension[]
+  questions  Question[]
+
+  responseSessions ResponseSession[]
+  feedbackCycles   FeedbackCycle[]
+
+  @@map("questionnaires")
+}
+
+model Dimension {
+  id              String        @id @default(cuid())
+  questionnaireId String
+  questionnaire   Questionnaire @relation(fields: [questionnaireId], references: [id], onDelete: Cascade)
+
+  key         String // ex: "extraversion"
+  name        String // ex: "Extroversão"
+  description String?
+  order       Int     @default(0)
+
+  questions       Question[]
+  dimensionScores DimensionScore[]
+
+  @@unique([questionnaireId, key])
+  @@map("dimensions")
+}
+
+model Question {
+  id              String        @id @default(cuid())
+  questionnaireId String
+  questionnaire   Questionnaire @relation(fields: [questionnaireId], references: [id], onDelete: Cascade)
+
+  dimensionId String
+  dimension   Dimension @relation(fields: [dimensionId], references: [id], onDelete: Cascade)
+
+  text             String
+  order            Int     @default(0)
+  reverseScored    Boolean @default(false)
+  allowNotObserved Boolean @default(false) // itens de 360 podem permitir "não observei"
+
+  answers Answer[]
+
+  @@index([questionnaireId])
+  @@map("questions")
+}
+
+model ResponseSession {
+  id              String        @id @default(cuid())
+  userId          String // quem está respondendo (profissional ou avaliador no 360)
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionnaireId String
+  questionnaire   Questionnaire @relation(fields: [questionnaireId], references: [id], onDelete: Cascade)
+
+  status      SessionStatus @default(IN_PROGRESS)
+  startedAt   DateTime      @default(now())
+  completedAt DateTime?
+
+  answers            Answer[]
+  scoringResult      ScoringResult?
+  feedbackInvitation FeedbackInvitation?
+
+  @@index([userId])
+  @@map("response_sessions")
+}
+
+model Answer {
+  id         String          @id @default(cuid())
+  sessionId  String
+  session    ResponseSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question        @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  value       Int? // 1..5 (null quando notObserved = true)
+  notObserved Boolean @default(false)
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([sessionId, questionId])
+  @@map("answers")
+}
+
+model ScoringResult {
+  id            String          @id @default(cuid())
+  sessionId     String          @unique
+  session       ResponseSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  engineVersion String          @default("1.0.0")
+  computedAt    DateTime        @default(now())
+
+  dimensionScores DimensionScore[]
+
+  @@map("scoring_results")
+}
+
+model DimensionScore {
+  id              String        @id @default(cuid())
+  scoringResultId String
+  scoringResult   ScoringResult @relation(fields: [scoringResultId], references: [id], onDelete: Cascade)
+  dimensionId     String
+  dimension       Dimension     @relation(fields: [dimensionId], references: [id], onDelete: Cascade)
+
+  rawMean   Float // média 1..5 dos itens válidos (já considerando reversão)
+  itemCount Int // quantidade de itens válidos usados no cálculo
+
+  @@unique([scoringResultId, dimensionId])
+  @@map("dimension_scores")
+}
+
+model FeedbackCycle {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  subjectUserId String
+  subject       User   @relation("CycleSubject", fields: [subjectUserId], references: [id], onDelete: Cascade)
+
+  questionnaireId String
+  questionnaire   Questionnaire @relation(fields: [questionnaireId], references: [id], onDelete: Cascade)
+
+  title         String
+  status        FeedbackCycleStatus @default(DRAFT)
+  minEvaluators Int                 @default(3) // tamanho mínimo para liberar agregação (privacidade)
+  openedAt      DateTime?
+  closedAt      DateTime?
+  createdAt     DateTime            @default(now())
+
+  invitations FeedbackInvitation[]
+
+  @@index([subjectUserId])
+  @@map("feedback_cycles")
+}
+
+model FeedbackInvitation {
+  id      String        @id @default(cuid())
+  cycleId String
+  cycle   FeedbackCycle @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+
+  evaluatorUserId String
+  evaluator       User   @relation("InvitationEvaluator", fields: [evaluatorUserId], references: [id], onDelete: Cascade)
+
+  relationship EvaluatorRelationship
+  status       InvitationStatus      @default(PENDING)
+
+  responseSessionId String?          @unique
+  responseSession   ResponseSession? @relation(fields: [responseSessionId], references: [id], onDelete: SetNull)
+
+  invitedAt   DateTime  @default(now())
+  respondedAt DateTime?
+
+  @@unique([cycleId, evaluatorUserId])
+  @@map("feedback_invitations")
+}
+
+model PDI {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation("PdiOwner", fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  status    PdiStatus @default(ACTIVE)
+  createdAt DateTime  @default(now())
+
+  objectives Objective[]
+
+  @@index([userId])
+  @@map("pdis")
+}
+
+model Objective {
+  id          String       @id @default(cuid())
+  pdiId       String
+  pdi         PDI          @relation(fields: [pdiId], references: [id], onDelete: Cascade)
+  description String
+  targetDate  DateTime?
+  status      ActionStatus @default(NOT_STARTED)
+  createdAt   DateTime     @default(now())
+
+  actions Action[]
+
+  @@map("objectives")
+}
+
+model Action {
+  id          String    @id @default(cuid())
+  objectiveId String
+  objective   Objective @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
+
+  description  String
+  ownerUserId  String
+  owner        User         @relation("ActionOwner", fields: [ownerUserId], references: [id], onDelete: Cascade)
+  dueDate      DateTime?
+  status       ActionStatus @default(NOT_STARTED)
+  evidenceNote String?
+  completedAt  DateTime?
+  createdAt    DateTime     @default(now())
+
+  @@map("actions")
+}
