@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { createUser } from "@/lib/admin-actions";
+import { BrandIcon } from "@/components/BrandIcon";
 
 const ROLE_LABEL: Record<string, string> = {
   ADMIN: "Admin",
@@ -47,17 +48,23 @@ export default async function AdminPage() {
 
   return (
     <div className="space-y-10">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Organização</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Visão administrativa — MINDORA Insights e gestão de usuários.
-        </p>
+      <div className="flex items-center gap-3">
+        <BrandIcon name="organizacao" className="h-10 w-auto" />
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900">Organização</h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Visão administrativa — MINDORA Insights e gestão de usuários.
+          </p>
+        </div>
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-slate-900">
-          Indicadores agregados de personalidade
-        </h2>
+        <div className="flex items-center gap-2">
+          <BrandIcon name="inteligencia" className="h-8 w-auto" />
+          <h2 className="text-lg font-semibold text-slate-900">
+            Indicadores agregados de personalidade
+          </h2>
+        </div>
         {!insightsAvailable ? (
           <p className="rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-800">
             Ainda há poucos resultados concluídos ({completedBigFive.length}) para exibir

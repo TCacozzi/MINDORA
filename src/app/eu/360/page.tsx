@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/Badge";
@@ -54,7 +53,7 @@ export default async function Feedback360Page() {
         <h2 className="text-lg font-semibold text-slate-900">Avaliações para responder</h2>
         {invitations.length === 0 && (
           <EmptyState
-            icon={ChatBubbleLeftRightIcon}
+            brandIcon="feedback"
             title="Nenhum convite no momento"
             description="Quando alguém pedir sua avaliação em um ciclo de 360°, os convites aparecem aqui."
           />

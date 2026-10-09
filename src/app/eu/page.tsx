@@ -1,19 +1,7 @@
 import Link from "next/link";
-import {
-  ClipboardDocumentCheckIcon,
-  ChatBubbleLeftRightIcon,
-  FlagIcon,
-} from "@heroicons/react/24/outline";
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
-
-function CardIcon({ icon: Icon }: { icon: typeof ClipboardDocumentCheckIcon }) {
-  return (
-    <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-mindora-lilac-light">
-      <Icon className="h-5 w-5 text-mindora-secondary" />
-    </span>
-  );
-}
+import { BrandIcon } from "@/components/BrandIcon";
 
 export default async function EuDashboardPage() {
   const user = await requireUser();
@@ -60,7 +48,7 @@ export default async function EuDashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-xl border border-slate-200 bg-white p-5">
           <div className="flex items-center gap-2">
-            <CardIcon icon={ClipboardDocumentCheckIcon} />
+            <BrandIcon name="avaliacao" className="h-9 w-auto" />
             <h2 className="text-sm font-medium text-slate-500">Avaliação de personalidade</h2>
           </div>
           {bigFiveStatus === "not_started" && (
@@ -104,7 +92,7 @@ export default async function EuDashboardPage() {
 
         <div className="rounded-xl border border-slate-200 bg-white p-5">
           <div className="flex items-center gap-2">
-            <CardIcon icon={ChatBubbleLeftRightIcon} />
+            <BrandIcon name="feedback" className="h-9 w-auto" />
             <h2 className="text-sm font-medium text-slate-500">Feedback 360°</h2>
           </div>
           <p className="mt-2 text-sm text-slate-700">
@@ -125,7 +113,7 @@ export default async function EuDashboardPage() {
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 sm:col-span-2">
           <div className="flex items-center gap-2">
-            <CardIcon icon={FlagIcon} />
+            <BrandIcon name="desenvolvimento" className="h-9 w-auto" />
             <h2 className="text-sm font-medium text-slate-500">
               Plano de Desenvolvimento Individual
             </h2>

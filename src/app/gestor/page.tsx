@@ -3,7 +3,6 @@ import {
   ClipboardDocumentCheckIcon,
   ChatBubbleLeftRightIcon,
   FlagIcon,
-  UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
@@ -41,7 +40,7 @@ export default async function GestorPage() {
 
       {reports.length === 0 && (
         <EmptyState
-          icon={UserGroupIcon}
+          brandIcon="equipe"
           title="Nenhum liderado direto"
           description="Quando o administrador cadastrar pessoas com você como gestor, elas aparecem aqui."
         />

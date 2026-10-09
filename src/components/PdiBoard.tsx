@@ -1,5 +1,5 @@
-import { FlagIcon } from "@heroicons/react/24/outline";
 import { prisma } from "@/lib/prisma";
+import { BrandIcon } from "@/components/BrandIcon";
 import { createPdi, addObjective, addAction, toggleActionStatus } from "@/lib/pdi-actions";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -28,9 +28,7 @@ export async function PdiBoard({ userId }: { userId: string }) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-5">
         <div className="flex items-center gap-2">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-mindora-lilac-light">
-            <FlagIcon className="h-5 w-5 text-mindora-secondary" />
-          </span>
+          <BrandIcon name="desenvolvimento" className="h-9 w-auto" />
           <p className="text-sm text-slate-600">Nenhum PDI ativo para {user.name}.</p>
         </div>
         <form action={createPdi} className="mt-4 flex gap-2">
